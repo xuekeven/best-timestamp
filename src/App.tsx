@@ -1,24 +1,248 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect, useRef } from 'react';
+import { Helmet } from 'react-helmet';
 import './App.css';
+import Header from './components/Header';
+import Section from './components/Section';
+import TimestampDisplay from './components/TimestampDisplay';
+import TimestampToHuman from './components/TimestampToHuman';
+import HumanToTimestamp from './components/HumanToTimestamp';
+import CodeExamples from './components/CodeExamples';
+import Intro from './components/Intro';
+
+const LANGUAGES = [
+  { code: 'zh', label: '中文' },
+  { code: 'en', label: 'English' },
+];
+
+const codeExamples = [
+  {
+    lang: 'JavaScript',
+    toTs: `// 日期转时间戳（秒）\nconst ts = Math.floor(new Date('2025-07-16T15:40:00').getTime() / 1000);\n// 时间戳转日期\nconst date = new Date(1752651600 * 1000);`,
+    toTsEn: `// Date to timestamp (seconds)\nconst ts = Math.floor(new Date('2025-07-16T15:40:00').getTime() / 1000);\n// Timestamp to date\nconst date = new Date(1752651600 * 1000);`,
+  },
+  {
+    lang: 'Python',
+    toTs: `# 日期转时间戳（秒）\nimport time\nts = int(time.mktime(time.strptime('2025-07-16 15:40:00', '%Y-%m-%d %H:%M:%S')))\n# 时间戳转日期\ntime_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(1752651600))`,
+    toTsEn: `# Date to timestamp (seconds)\nimport time\nts = int(time.mktime(time.strptime('2025-07-16 15:40:00', '%Y-%m-%d %H:%M:%S')))\n# Timestamp to date\ntime_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(1752651600))`,
+  },
+  {
+    lang: 'PHP',
+    toTs: `// 日期转时间戳（秒）\n$ts = strtotime('2025-07-16 15:40:00');\n// 时间戳转日期\n$date = date('Y-m-d H:i:s', 1752651600);`,
+    toTsEn: `// Date to timestamp (seconds)\n$ts = strtotime('2025-07-16 15:40:00');\n// Timestamp to date\n$date = date('Y-m-d H:i:s', 1752651600);`,
+  },
+  {
+    lang: 'MySQL',
+    toTs: `-- 日期转时间戳（秒）\nSELECT UNIX_TIMESTAMP('2025-07-16 15:40:00');\n-- 时间戳转日期\nSELECT FROM_UNIXTIME(1752651600);`,
+    toTsEn: `-- Date to timestamp (seconds)\nSELECT UNIX_TIMESTAMP('2025-07-16 15:40:00');\n-- Timestamp to date\nSELECT FROM_UNIXTIME(1752651600);`,
+  },
+  {
+    lang: 'Java',
+    toTs: `// 日期转时间戳（秒）\nlong ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2025-07-16 15:40:00").getTime() / 1000;\n// 时间戳转日期\nDate date = new Date(1752651600L * 1000);`,
+    toTsEn: `// Date to timestamp (seconds)\nlong ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2025-07-16 15:40:00").getTime() / 1000;\n// Timestamp to date\nDate date = new Date(1752651600L * 1000);`,
+  },
+  {
+    lang: 'Ruby',
+    toTs: `# 日期转时间戳（秒）\nts = Time.local(2025, 7, 16, 15, 40, 0).to_i\n# 时间戳转日期\ndate = Time.at(1752651600)`,
+    toTsEn: `# Date to timestamp (seconds)\nts = Time.local(2025, 7, 16, 15, 40, 0).to_i\n# Timestamp to date\ndate = Time.at(1752651600)`,
+  },
+  {
+    lang: 'Go',
+    toTs: `// 日期转时间戳（秒）\nt, _ := time.Parse("2006-01-02 15:04:05", "2025-07-16 15:40:00")\nts := t.Unix()\n// 时间戳转日期\ndate := time.Unix(1752651600, 0)`,
+    toTsEn: `// Date to timestamp (seconds)\nt, _ := time.Parse("2006-01-02 15:04:05", "2025-07-16 15:40:00")\nts := t.Unix()\n// Timestamp to date\ndate := time.Unix(1752651600, 0)`,
+  },
+  {
+    lang: 'C#',
+    toTs: `// 日期转时间戳（秒）\nvar ts = (int)(DateTime.Parse("2025-07-16 15:40:00").ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds;\n// 时间戳转日期\nvar date = DateTimeOffset.FromUnixTimeSeconds(1752651600).LocalDateTime;`,
+    toTsEn: `// Date to timestamp (seconds)\nvar ts = (int)(DateTime.Parse("2025-07-16 15:40:00").ToUniversalTime().Subtract(new DateTime(1970, 1, 1))).TotalSeconds;\n// Timestamp to date\nvar date = DateTimeOffset.FromUnixTimeSeconds(1752651600).LocalDateTime;`,
+  },
+];
 
 function App() {
+  // 多语言
+  const [lang, setLang] = useState('zh');
+  const [dropdown, setDropdown] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
+  // 实时 Unix 时间戳
+  const [timestamp, setTimestamp] = useState(() => Math.floor(Date.now() / 1000));
+  const [copied, setCopied] = useState(false);
+  // 时间戳转人类时间
+  const [inputTs, setInputTs] = useState('');
+  const [humanTime, setHumanTime] = useState('');
+  const [tsError, setTsError] = useState('');
+  const [gmtTime, setGmtTime] = useState('');
+  const [localTime, setLocalTime] = useState('');
+  const [relativeTime, setRelativeTime] = useState('');
+  // 人类时间转时间戳
+  const [inputDate, setInputDate] = useState('');
+  const [inputTime, setInputTime] = useState('');
+  const [tsUnit, setTsUnit] = useState('s');
+  const [outputTs, setOutputTs] = useState('');
+  const [ts3Error, setTs3Error] = useState('');
+  // 代码区块复制状态
+  const [copyIdx, setCopyIdx] = useState<string | null>(null);
+  const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  // 区块展开收起状态
+  const [openSections, setOpenSections] = useState({
+    ts: true,
+    toHuman: true,
+    toTs: true,
+    code: true,
+    intro: true,
+  });
+  const handleToggleSection = (key: keyof typeof openSections) => {
+    setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // 点击外部关闭多语言下拉
+  useEffect(() => {
+    if (!dropdown) return;
+    const handleClick = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [dropdown]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimestamp(Math.floor(Date.now() / 1000));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(String(timestamp));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch {
+      setCopied(false);
+    }
+  };
+
+  const handleTsToHuman = () => {
+    if (!/^\d{10,}$/.test(inputTs)) {
+      setHumanTime('');
+      setTsError(lang === 'zh' ? '请输入有效的时间戳' : 'Please enter a valid timestamp');
+      setGmtTime('');
+      setLocalTime('');
+      setRelativeTime('');
+      return;
+    }
+    setTsError('');
+    let tsNum = parseInt(inputTs, 10);
+    let date: Date | null = null;
+    if (inputTs.length === 10) {
+      date = new Date(tsNum * 1000);
+    } else if (inputTs.length === 13) {
+      date = new Date(tsNum);
+    } else if (inputTs.length === 16) {
+      date = new Date(Math.floor(tsNum / 1000));
+    } else if (inputTs.length === 19) {
+      date = new Date(Math.floor(tsNum / 1000000));
+    } else {
+      setHumanTime('');
+      setTsError(lang === 'zh' ? '不支持的时间戳长度' : 'Unsupported timestamp length');
+      setGmtTime('');
+      setLocalTime('');
+      setRelativeTime('');
+      return;
+    }
+    if (!isNaN(date.getTime())) {
+      setGmtTime(date.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+        timeZone: 'UTC', hour12: false, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit',
+      }));
+      const localStr = date.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+        hour12: false, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit',
+      });
+      const offset = -date.getTimezoneOffset();
+      const sign = offset >= 0 ? '+' : '-';
+      const absOffset = Math.abs(offset);
+      const hours = Math.floor(absOffset / 60);
+      const minutes = absOffset % 60;
+      const gmtStr = `GMT${sign}${hours}${minutes !== 0 ? ':' + String(minutes).padStart(2, '0') : ''}`;
+      setLocalTime(`${localStr}（${gmtStr}）`);
+      setRelativeTime(getRelativeTime(date));
+      setHumanTime('ok');
+    } else {
+      setHumanTime('');
+      setTsError(lang === 'zh' ? '无效的时间戳' : 'Invalid timestamp');
+      setGmtTime('');
+      setLocalTime('');
+      setRelativeTime('');
+    }
+  };
+
+  const handleHumanToTs = () => {
+    if (!inputDate) {
+      setOutputTs('');
+      setTs3Error(lang === 'zh' ? '请选择日期' : 'Please select a date');
+      return;
+    }
+    const dateStr = inputDate + (inputTime ? ('T' + inputTime) : 'T00:00:00');
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) {
+      setOutputTs('');
+      setTs3Error(lang === 'zh' ? '无效的日期时间' : 'Invalid date/time');
+      return;
+    }
+    setTs3Error('');
+    let ts = Math.floor(d.getTime() / 1000);
+    if (tsUnit === 'ms') ts = d.getTime();
+    if (tsUnit === 'us') ts = d.getTime() * 1000;
+    if (tsUnit === 'ns') ts = d.getTime() * 1000000;
+    setOutputTs(String(ts));
+  };
+
+  function getRelativeTime(target: Date) {
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - target.getTime()) / 1000);
+    const absDiff = Math.abs(diff);
+    let str = '';
+    if (absDiff < 60) {
+      str = lang === 'zh' ? `${absDiff}秒${diff > 0 ? '前' : '后'}` : `${absDiff} seconds ${diff > 0 ? 'ago' : 'later'}`;
+    } else if (absDiff < 3600) {
+      str = lang === 'zh' ? `${Math.floor(absDiff/60)}分钟${diff > 0 ? '前' : '后'}` : `${Math.floor(absDiff/60)} minutes ${diff > 0 ? 'ago' : 'later'}`;
+    } else if (absDiff < 86400) {
+      str = lang === 'zh' ? `${Math.floor(absDiff/3600)}小时${diff > 0 ? '前' : '后'}` : `${Math.floor(absDiff/3600)} hours ${diff > 0 ? 'ago' : 'later'}`;
+    } else {
+      str = lang === 'zh' ? `${Math.floor(absDiff/86400)}天${diff > 0 ? '前' : '后'}` : `${Math.floor(absDiff/86400)} days ${diff > 0 ? 'ago' : 'later'}`;
+    }
+    return str;
+  }
+
+  const handleCopyCode = async (code: string, idx: number) => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopiedIdx(idx);
+      setTimeout(() => setCopiedIdx(null), 1200);
+    } catch {}
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <Helmet htmlAttributes={{ lang: lang }}>...</Helmet> */}
+      <Header lang={lang} setLang={setLang} dropdown={dropdown} setDropdown={setDropdown} langRef={langRef as React.RefObject<HTMLDivElement>} LANGUAGES={LANGUAGES} />
+      <main className="main-content">
+        <Section title={lang === 'zh' ? '当前 Unix 时间戳' : 'Current Unix Timestamp'} open={openSections.ts} onToggle={() => handleToggleSection('ts')} showToggle onMouseEnter={() => setCopyIdx('ts')} onMouseLeave={() => setCopyIdx(null)}>
+          <TimestampDisplay timestamp={timestamp} copied={copied} onCopy={handleCopy} lang={lang} open={openSections.ts} />
+        </Section>
+        <Section title={lang === 'zh' ? '时间戳转人类时间' : 'Timestamp to Human Time'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
+          <TimestampToHuman inputTs={inputTs} setInputTs={setInputTs} handleTsToHuman={handleTsToHuman} tsError={tsError} humanTime={humanTime} gmtTime={gmtTime} localTime={localTime} relativeTime={relativeTime} lang={lang} open={openSections.toHuman} />
+        </Section>
+        <Section title={lang === 'zh' ? '人类时间转Unix时间戳' : 'Human Time to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>
+          <HumanToTimestamp inputDate={inputDate} setInputDate={setInputDate} inputTime={inputTime} setInputTime={setInputTime} tsUnit={tsUnit} setTsUnit={setTsUnit} handleHumanToTs={handleHumanToTs} ts3Error={ts3Error} outputTs={outputTs} lang={lang} open={openSections.toTs} />
+        </Section>
+        <Section title={lang === 'zh' ? '多语言代码示例' : 'Code Examples in Multiple Languages'} open={openSections.code} onToggle={() => handleToggleSection('code')} showToggle onMouseEnter={() => setCopyIdx('code')} onMouseLeave={() => setCopyIdx(null)}>
+          <CodeExamples codeExamples={codeExamples} lang={lang} copyIdx={copyIdx} setCopyIdx={setCopyIdx} copiedIdx={copiedIdx} handleCopyCode={handleCopyCode} open={openSections.code} />
+        </Section>
+        <Section title={lang === 'zh' ? '什么是 Unix 时间戳？' : 'What is a Unix Timestamp?'} open={openSections.intro} onToggle={() => handleToggleSection('intro')} showToggle onMouseEnter={() => setCopyIdx('intro')} onMouseLeave={() => setCopyIdx(null)}>
+          <Intro lang={lang} open={openSections.intro} />
+        </Section>
+      </main>
+      <footer className="footer">© 2025 Keven's Tools.</footer>
     </div>
   );
 }
