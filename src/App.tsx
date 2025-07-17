@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 // import { Helmet } from 'react-helmet';
 import './App.css';
+
+// Google Analytics 类型声明
+declare global {
+  interface Window {
+    dataLayer: any;
+    gtag: (...args: any[]) => void;
+  }
+}
 import Header from './components/Header';
 import Section from './components/Section';
 import TimestampDisplay from './components/TimestampDisplay';
@@ -104,6 +112,27 @@ function App() {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [dropdown]);
+
+  // Google Analytics
+  useEffect(() => {
+    // 加载 gtag.js
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-9C7KLL032Q';
+    document.body.appendChild(script);
+
+    // 初始化 GA
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () {
+      window.dataLayer.push(arguments);
+    };
+    window.gtag('js', new Date());
+    window.gtag('config', 'G-9C7KLL032Q');
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
