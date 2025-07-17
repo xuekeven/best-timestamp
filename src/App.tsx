@@ -82,10 +82,18 @@ function App() {
   const [localTime, setLocalTime] = useState('');
   const [relativeTime, setRelativeTime] = useState('');
   // 人类时间转时间戳
-  const [inputDate, setInputDate] = useState('');
-  const [inputTime, setInputTime] = useState('');
-  const [tsUnit, setTsUnit] = useState('s');
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  const [inputYear, setInputYear] = useState(now.getFullYear().toString());
+  const [inputMonth, setInputMonth] = useState(pad(now.getMonth() + 1));
+  const [inputDay, setInputDay] = useState(pad(now.getDate()));
+  const [inputHour, setInputHour] = useState(pad(now.getHours()));
+  const [inputMinute, setInputMinute] = useState(pad(now.getMinutes()));
+  const [inputSecond, setInputSecond] = useState(pad(now.getSeconds()));
   const [outputTs, setOutputTs] = useState('');
+  const [gmtTime2, setGmtTime2] = useState('');
+  const [localTime2, setLocalTime2] = useState('');
+  const [relativeTime2, setRelativeTime2] = useState('');
   const [ts3Error, setTs3Error] = useState('');
   // 代码区块复制状态
   const [copyIdx, setCopyIdx] = useState<string | null>(null);
@@ -221,24 +229,60 @@ function App() {
   };
 
   const handleHumanToTs = () => {
-    if (!inputDate) {
+    if (!inputYear || !inputMonth || !inputDay || !inputHour || !inputMinute || !inputSecond) {
       setOutputTs('');
-      setTs3Error(lang === 'zh' ? '请选择日期' : 'Please select a date');
+      setTs3Error(lang === 'zh' ? '请填写完整的年月日时分秒' : 'Please fill in all fields (year, month, day, hour, minute, second)');
+      setGmtTime2('');
+      setLocalTime2('');
+      setRelativeTime2('');
       return;
     }
-    const dateStr = inputDate + (inputTime ? ('T' + inputTime) : 'T00:00:00');
-    const d = new Date(dateStr);
-    if (isNaN(d.getTime())) {
+    const y = parseInt(inputYear, 10);
+    const m = parseInt(inputMonth, 10) - 1;
+    const d = parseInt(inputDay, 10);
+    const h = parseInt(inputHour, 10);
+    const min = parseInt(inputMinute, 10);
+    const s = parseInt(inputSecond, 10);
+    const dateObj = new Date(y, m, d, h, min, s);
+    if (isNaN(dateObj.getTime())) {
       setOutputTs('');
       setTs3Error(lang === 'zh' ? '无效的日期时间' : 'Invalid date/time');
+      setGmtTime2('');
+      setLocalTime2('');
+      setRelativeTime2('');
       return;
     }
     setTs3Error('');
-    let ts = Math.floor(d.getTime() / 1000);
-    if (tsUnit === 'ms') ts = d.getTime();
-    if (tsUnit === 'us') ts = d.getTime() * 1000;
-    if (tsUnit === 'ns') ts = d.getTime() * 1000000;
-    setOutputTs(String(ts));
+    setOutputTs(String(Math.floor(dateObj.getTime() / 1000)));
+    setGmtTime2(dateObj.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+      timeZone: 'UTC',
+      hour12: true,
+      weekday: 'short',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    }));
+    const localStr = dateObj.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+      hour12: true,
+      weekday: 'short',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+    const offset = -dateObj.getTimezoneOffset();
+    const sign = offset >= 0 ? '+' : '-';
+    const absOffset = Math.abs(offset);
+    const hours = Math.floor(absOffset / 60);
+    const minutes = absOffset % 60;
+    const gmtStr = `GMT${sign}${hours}${minutes !== 0 ? ':' + String(minutes).padStart(2, '0') : ''}`;
+    setLocalTime2(`${localStr}（${gmtStr}）`);
+    setRelativeTime2(getRelativeTime(dateObj));
   };
 
   function getRelativeTime(target: Date) {
@@ -278,7 +322,17 @@ function App() {
           <TimestampToHuman inputTs={inputTs} setInputTs={setInputTs} handleTsToHuman={handleTsToHuman} tsError={tsError} humanTime={humanTime} gmtTime={gmtTime} localTime={localTime} relativeTime={relativeTime} lang={lang} open={openSections.toHuman} />
         </Section>
         <Section title={lang === 'zh' ? '日期转时间戳' : 'Date to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>
-          <HumanToTimestamp inputDate={inputDate} setInputDate={setInputDate} inputTime={inputTime} setInputTime={setInputTime} tsUnit={tsUnit} setTsUnit={setTsUnit} handleHumanToTs={handleHumanToTs} ts3Error={ts3Error} outputTs={outputTs} lang={lang} open={openSections.toTs} />
+          <HumanToTimestamp
+            inputYear={inputYear} setInputYear={setInputYear}
+            inputMonth={inputMonth} setInputMonth={setInputMonth}
+            inputDay={inputDay} setInputDay={setInputDay}
+            inputHour={inputHour} setInputHour={setInputHour}
+            inputMinute={inputMinute} setInputMinute={setInputMinute}
+            inputSecond={inputSecond} setInputSecond={setInputSecond}
+            handleHumanToTs={handleHumanToTs}
+            ts3Error={ts3Error} outputTs={outputTs} lang={lang} open={openSections.toTs}
+            gmtTime={gmtTime2} localTime={localTime2} relativeTime={relativeTime2}
+          />
         </Section>
         <Section title={lang === 'zh' ? '多语言代码示例' : 'Code Examples in Multiple Languages'} open={openSections.code} onToggle={() => handleToggleSection('code')} showToggle onMouseEnter={() => setCopyIdx('code')} onMouseLeave={() => setCopyIdx(null)}>
           <CodeExamples codeExamples={codeExamples} lang={lang} copyIdx={copyIdx} setCopyIdx={setCopyIdx} copiedIdx={copiedIdx} handleCopyCode={handleCopyCode} open={openSections.code} />
