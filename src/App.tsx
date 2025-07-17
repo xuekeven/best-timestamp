@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-// import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import './App.css';
 
 import Header from './components/Header';
@@ -182,6 +182,31 @@ function App() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    document.title = lang === 'zh' ? 'Unix时间戳转换工具 | 最好用的时间戳在线转换' : 'The Best Unix Timestamp Converter Online';
+    // 设置 description
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', lang === 'zh'
+      ? '支持Unix时间戳与日期互转，支持多语言代码示例，自动刷新当前时间戳，极致易用的时间戳工具。'
+      : 'Convert Unix timestamp to date and vice versa. Multi-language code examples. The best online Unix timestamp tool.');
+
+    // 设置 keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.setAttribute('content', lang === 'zh'
+      ? 'Unix时间戳,时间戳转换,时间戳转日期,日期转时间戳,时间戳工具,epoch,unix timestamp'
+      : 'unix timestamp, timestamp converter, epoch, date to timestamp, timestamp to date, online tool');
+  }, [lang]);
+
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(String(timestamp));
@@ -343,38 +368,39 @@ function App() {
   };
 
   return (
-    <div className="App">
-      {/* <Helmet htmlAttributes={{ lang: lang }}>...</Helmet> */}
-      <Header lang={lang} setLang={setLang} dropdown={dropdown} setDropdown={setDropdown} langRef={langRef as React.RefObject<HTMLDivElement>} LANGUAGES={LANGUAGES} />
-      <main className="main-content">
-        <Section title={lang === 'zh' ? '当前时间戳（Unix Timestamp）' : 'The Current Epoch Unix Timestamp'} open={openSections.ts} onToggle={() => handleToggleSection('ts')} showToggle onMouseEnter={() => setCopyIdx('ts')} onMouseLeave={() => setCopyIdx(null)}>
-          <TimestampDisplay timestamp={timestamp} copied={copied} onCopy={handleCopy} lang={lang} open={openSections.ts} />
-        </Section>
-        <Section title={lang === 'zh' ? '时间戳（Unix Timestamp）转日期' : 'Unix Timestamp to Date'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
-          <TimestampToHuman inputTs={inputTs} setInputTs={setInputTs} handleTsToHuman={handleTsToHuman} tsError={tsError} humanTime={humanTime} gmtTime={gmtTime} localTime={localTime} relativeTime={relativeTime} lang={lang} open={openSections.toHuman} />
-        </Section>
-        <Section title={lang === 'zh' ? '日期转时间戳（Unix Timestamp）' : 'Date to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>
-          <HumanToTimestamp
-            inputYear={inputYear} setInputYear={setInputYear}
-            inputMonth={inputMonth} setInputMonth={setInputMonth}
-            inputDay={inputDay} setInputDay={setInputDay}
-            inputHour={inputHour} setInputHour={setInputHour}
-            inputMinute={inputMinute} setInputMinute={setInputMinute}
-            inputSecond={inputSecond} setInputSecond={setInputSecond}
-            handleHumanToTs={handleHumanToTs}
-            ts3Error={ts3Error} outputTs={outputTs} lang={lang} open={openSections.toTs}
-            gmtTime={gmtTime2} localTime={localTime2} relativeTime={relativeTime2}
-          />
-        </Section>
-        <Section title={lang === 'zh' ? '多语言代码示例' : 'Code Examples in Multiple Languages'} open={openSections.code} onToggle={() => handleToggleSection('code')} showToggle onMouseEnter={() => setCopyIdx('code')} onMouseLeave={() => setCopyIdx(null)}>
-          <CodeExamples codeExamples={codeExamples} lang={lang} copyIdx={copyIdx} setCopyIdx={setCopyIdx} copiedIdx={copiedIdx} handleCopyCode={handleCopyCode} open={openSections.code} />
-        </Section>
-        <Section title={lang === 'zh' ? '常见问题' : 'FAQ'} open={openSections.intro} onToggle={() => handleToggleSection('intro')} showToggle onMouseEnter={() => setCopyIdx('intro')} onMouseLeave={() => setCopyIdx(null)}>
-          <Intro lang={lang} open={openSections.intro} />
-        </Section>
-      </main>
-      <footer className="footer">© 2025 Keven's Tools.</footer>
-    </div>
+    <>
+      <div className="App">
+        <Header lang={lang} setLang={setLang} dropdown={dropdown} setDropdown={setDropdown} langRef={langRef as React.RefObject<HTMLDivElement>} LANGUAGES={LANGUAGES} />
+        <main className="main-content">
+          <Section title={lang === 'zh' ? '当前时间戳（Unix Timestamp）' : 'The Current Epoch Unix Timestamp'} open={openSections.ts} onToggle={() => handleToggleSection('ts')} showToggle onMouseEnter={() => setCopyIdx('ts')} onMouseLeave={() => setCopyIdx(null)}>
+            <TimestampDisplay timestamp={timestamp} copied={copied} onCopy={handleCopy} lang={lang} open={openSections.ts} />
+          </Section>
+          <Section title={lang === 'zh' ? '时间戳（Unix Timestamp）转日期' : 'Unix Timestamp to Date'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
+            <TimestampToHuman inputTs={inputTs} setInputTs={setInputTs} handleTsToHuman={handleTsToHuman} tsError={tsError} humanTime={humanTime} gmtTime={gmtTime} localTime={localTime} relativeTime={relativeTime} lang={lang} open={openSections.toHuman} />
+          </Section>
+          <Section title={lang === 'zh' ? '日期转时间戳（Unix Timestamp）' : 'Date to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>
+            <HumanToTimestamp
+              inputYear={inputYear} setInputYear={setInputYear}
+              inputMonth={inputMonth} setInputMonth={setInputMonth}
+              inputDay={inputDay} setInputDay={setInputDay}
+              inputHour={inputHour} setInputHour={setInputHour}
+              inputMinute={inputMinute} setInputMinute={setInputMinute}
+              inputSecond={inputSecond} setInputSecond={setInputSecond}
+              handleHumanToTs={handleHumanToTs}
+              ts3Error={ts3Error} outputTs={outputTs} lang={lang} open={openSections.toTs}
+              gmtTime={gmtTime2} localTime={localTime2} relativeTime={relativeTime2}
+            />
+          </Section>
+          <Section title={lang === 'zh' ? '多语言代码示例' : 'Code Examples in Multiple Languages'} open={openSections.code} onToggle={() => handleToggleSection('code')} showToggle onMouseEnter={() => setCopyIdx('code')} onMouseLeave={() => setCopyIdx(null)}>
+            <CodeExamples codeExamples={codeExamples} lang={lang} copyIdx={copyIdx} setCopyIdx={setCopyIdx} copiedIdx={copiedIdx} handleCopyCode={handleCopyCode} open={openSections.code} />
+          </Section>
+          <Section title={lang === 'zh' ? '常见问题' : 'FAQ'} open={openSections.intro} onToggle={() => handleToggleSection('intro')} showToggle onMouseEnter={() => setCopyIdx('intro')} onMouseLeave={() => setCopyIdx(null)}>
+            <Intro lang={lang} open={openSections.intro} />
+          </Section>
+        </main>
+        <footer className="footer">© 2025 Keven's Tools.</footer>
+      </div>
+    </>
   );
 }
 

@@ -62,7 +62,7 @@ const CodeExamples: React.FC<CodeExamplesProps> = ({ codeExamples, lang, copyIdx
                 </button>
               </div>
               <pre style={{ background: '#fff', borderRadius: 6, padding: 12, fontSize: 14, overflowX: 'auto', border: '1px solid #eee', margin: 0 }}>
-                {lang === 'zh' ? ex.getNow : ex.getNowEn}
+                {(lang === 'zh' ? ex.getNow : ex.getNowEn) as string}
               </pre>
             </div>
             {/* 时间戳转日期 */}
@@ -80,7 +80,7 @@ const CodeExamples: React.FC<CodeExamplesProps> = ({ codeExamples, lang, copyIdx
                 </button>
               </div>
               <pre style={{ background: '#fff', borderRadius: 6, padding: 12, fontSize: 14, overflowX: 'auto', border: '1px solid #eee', margin: 0 }}>
-                {lang === 'zh' ? ex.tsToDate : ex.tsToDateEn}
+                {(lang === 'zh' ? ex.tsToDate : ex.tsToDateEn) as string}
               </pre>
             </div>
             {/* 日期转时间戳 */}
@@ -98,7 +98,7 @@ const CodeExamples: React.FC<CodeExamplesProps> = ({ codeExamples, lang, copyIdx
                 </button>
               </div>
               <pre style={{ background: '#fff', borderRadius: 6, padding: 12, fontSize: 14, overflowX: 'auto', border: '1px solid #eee', margin: 0 }}>
-                {lang === 'zh' ? ex.dateToTs : ex.dateToTsEn}
+                {(lang === 'zh' ? ex.dateToTs : ex.dateToTsEn) as string}
               </pre>
             </div>
           </div>
