@@ -104,7 +104,19 @@ const HumanToTimestamp: React.FC<HumanToTimestampProps> = ({ inputYear, setInput
         </div>
         <button
           onClick={handleHumanToTs}
-          style={{ padding: '6px 16px', borderRadius: 6, border: 'none', background: '#1677ff', color: '#fff', fontWeight: 500, cursor: 'pointer', fontSize: 16, transition: 'background 0.2s', outline: 'none' }}
+          style={{ 
+            padding: '6px 16px', 
+            borderRadius: 6, 
+            border: 'none', 
+            background: '#1677ff', 
+            color: '#fff', fontWeight: 500, 
+            cursor: 'pointer', 
+            fontSize: 14, 
+            transition: 'background 0.2s', 
+            outline: 'none',
+            marginLeft: 2,
+            height: 32,
+          }}
         >
           {lang === 'zh' ? '转为时间戳' : 'To Timestamp'}
         </button>
@@ -123,11 +135,11 @@ const HumanToTimestamp: React.FC<HumanToTimestampProps> = ({ inputYear, setInput
                 <td style={{ padding: '4px 8px', border: '1px solid #eee' }}>{gmtTime}</td>
               </tr>
               <tr>
-                <td style={{ color: '#888', padding: '4px 8px', border: '1px solid #eee' }}>{lang === 'zh' ? '你所在时区' : 'Your time zone'}</td>
+                <td style={{ color: '#888', padding: '4px 8px', border: '1px solid #eee' }}>{lang === 'zh' ? '你所在时区时间' : 'Your time zone'}</td>
                 <td style={{ padding: '4px 8px', border: '1px solid #eee' }}>{localTime}</td>
               </tr>
               <tr>
-                <td style={{ color: '#888', padding: '4px 8px', border: '1px solid #eee' }}>{lang === 'zh' ? '相对当前时间' : 'Relative'}</td>
+                <td style={{ color: '#888', padding: '4px 8px', border: '1px solid #eee' }}>{lang === 'zh' ? '相对时间' : 'Relative'}</td>
                 <td style={{ padding: '4px 8px', border: '1px solid #eee' }}>{relativeTime}</td>
               </tr>
             </tbody>

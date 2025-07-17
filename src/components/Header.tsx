@@ -16,11 +16,11 @@ const Header: React.FC<HeaderProps> = ({ lang, setLang, dropdown, setDropdown, l
       className="header-lang"
       ref={langRef as React.RefObject<HTMLDivElement>}
       onClick={() => setDropdown(!dropdown)}
-      style={{ userSelect: 'none' }}
+      style={{ userSelect: 'none', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
     >
-      <span className="lang-icon" role="img" aria-label="language">🌐</span>
-      <span className="lang-label">{LANGUAGES.find(l => l.code === lang)?.label ?? lang}</span>
-      <span className="lang-arrow">▼</span>
+      <div className="lang-icon" style={{ marginTop: 3 }} role="img" aria-label="language">🌐</div>
+      <div className="lang-label">{LANGUAGES.find(l => l.code === lang)?.label ?? lang}</div>
+      <div className="lang-arrow">▼</div>
       {dropdown && (
         <ul className="lang-dropdown">
           {LANGUAGES.map(l => (

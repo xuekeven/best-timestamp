@@ -2,8 +2,12 @@ import React from 'react';
 
 interface CodeExample {
   lang: string;
-  toTs: string;
-  toTsEn: string;
+  getNow: string;
+  tsToDate: string;
+  dateToTs: string;
+  getNowEn: string;
+  tsToDateEn: string;
+  dateToTsEn: string;
 }
 
 interface CodeExamplesProps {
@@ -25,57 +29,80 @@ const CodeExamples: React.FC<CodeExamplesProps> = ({ codeExamples, lang, copyIdx
           : 'Code snippets for timestamp/date conversion in popular languages'}
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 24 }}>
-        {codeExamples.map((ex, idx) => {
-          const code = lang === 'zh' ? ex.toTs : ex.toTsEn;
-          return (
-            <div
-              key={ex.lang}
-              style={{
-                flex: '1 1 320px',
-                minWidth: 260,
-                background: '#f7f8fa',
-                borderRadius: 8,
-                boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
-                padding: 16,
-                marginBottom: 12,
-                position: 'relative',
-              }}
-              onMouseEnter={() => setCopyIdx(`${idx}`)}
-              onMouseLeave={() => setCopyIdx(null)}
-            >
-              <div style={{ fontWeight: 500, marginBottom: 8 }}>{ex.lang}</div>
-              <pre style={{ background: '#fff', borderRadius: 6, padding: 12, fontSize: 14, overflowX: 'auto', border: '1px solid #eee', margin: 0 }}>
-                {code}
-              </pre>
-              {/* 复制按钮 */}
-              {copyIdx === `${idx}` && (
+        {codeExamples.map((ex, idx) => (
+          <div
+            key={ex.lang}
+            style={{
+              flex: '1 1 340px',
+              minWidth: 260,
+              background: '#f7f8fa',
+              borderRadius: 8,
+              boxShadow: '0 1px 4px rgba(0,0,0,0.03)',
+              padding: 16,
+              marginBottom: 12,
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+            }}
+          >
+            <div style={{ fontWeight: 500, marginBottom: 8 }}>{ex.lang}</div>
+            {/* 获取当前时间戳 */}
+            <div>
+              <div style={{ color: '#1677ff', fontWeight: 500, marginBottom: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {lang === 'zh' ? '获取当前 Unix 时间戳' : 'Get current Unix timestamp'}
+                </div>
                 <button
-                  onClick={() => handleCopyCode(code, idx)}
-                  style={{
-                    position: 'absolute',
-                    top: 12,
-                    right: 16,
-                    background: 'rgba(255,255,255,0.95)',
-                    border: '1px solid #eee',
-                    borderRadius: 4,
-                    padding: '2px 8px',
-                    cursor: 'pointer',
-                    fontSize: 16,
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4,
-                    zIndex: 2,
-                    boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
-                  }}
+                  onClick={() => handleCopyCode(lang === 'zh' ? ex.getNow : ex.getNowEn, idx * 3)}
+                  style={{ marginTop: 4, background: '#fff', border: '1px solid #eee', borderRadius: 4, padding: '2px 8px', cursor: 'pointer', fontSize: 14, color: '#1677ff' }}
                   title={lang === 'zh' ? '复制代码' : 'Copy code'}
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1677ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-                  <span style={{ fontSize: 13, color: '#1677ff' }}>{copiedIdx === idx ? (lang === 'zh' ? '已复制' : 'Copied') : (lang === 'zh' ? '复制' : 'Copy')}</span>
+                  {copiedIdx === idx * 3 ? (lang === 'zh' ? '已复制' : 'Copied') : (lang === 'zh' ? '复制' : 'Copy')}
                 </button>
-              )}
+              </div>
+              <pre style={{ background: '#fff', borderRadius: 6, padding: 12, fontSize: 14, overflowX: 'auto', border: '1px solid #eee', margin: 0 }}>
+                {lang === 'zh' ? ex.getNow : ex.getNowEn}
+              </pre>
             </div>
-          );
-        })}
+            {/* 时间戳转日期 */}
+            <div>
+              <div style={{ color: '#1677ff', fontWeight: 500, marginBottom: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {lang === 'zh' ? 'Unix 时间戳转日期' : 'Unix timestamp to date'}
+                </div>  
+                <button
+                  onClick={() => handleCopyCode(lang === 'zh' ? ex.tsToDate : ex.tsToDateEn, idx * 3 + 1)}
+                  style={{ marginTop: 4, background: '#fff', border: '1px solid #eee', borderRadius: 4, padding: '2px 8px', cursor: 'pointer', fontSize: 14, color: '#1677ff' }}
+                  title={lang === 'zh' ? '复制代码' : 'Copy code'}
+                >
+                  {copiedIdx === idx * 3 + 1 ? (lang === 'zh' ? '已复制' : 'Copied') : (lang === 'zh' ? '复制' : 'Copy')}
+                </button>
+              </div>
+              <pre style={{ background: '#fff', borderRadius: 6, padding: 12, fontSize: 14, overflowX: 'auto', border: '1px solid #eee', margin: 0 }}>
+                {lang === 'zh' ? ex.tsToDate : ex.tsToDateEn}
+              </pre>
+            </div>
+            {/* 日期转时间戳 */}
+            <div>
+              <div style={{ color: '#1677ff', fontWeight: 500, marginBottom: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {lang === 'zh' ? '日期转 Unix 时间戳' : 'Date to Unix timestamp'}
+                </div>
+                <button
+                  onClick={() => handleCopyCode(lang === 'zh' ? ex.dateToTs : ex.dateToTsEn, idx * 3 + 2)}
+                  style={{ marginTop: 4, background: '#fff', border: '1px solid #eee', borderRadius: 4, padding: '2px 8px', cursor: 'pointer', fontSize: 14, color: '#1677ff' }}
+                  title={lang === 'zh' ? '复制代码' : 'Copy code'}
+                >
+                  {copiedIdx === idx * 3 + 2 ? (lang === 'zh' ? '已复制' : 'Copied') : (lang === 'zh' ? '复制' : 'Copy')}
+                </button>
+              </div>
+              <pre style={{ background: '#fff', borderRadius: 6, padding: 12, fontSize: 14, overflowX: 'auto', border: '1px solid #eee', margin: 0 }}>
+                {lang === 'zh' ? ex.dateToTs : ex.dateToTsEn}
+              </pre>
+            </div>
+          </div>
+        ))}
       </div>
     </>
   ) : null
