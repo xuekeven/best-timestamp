@@ -182,10 +182,10 @@ function App() {
     }
     if (!isNaN(date.getTime())) {
       setGmtTime(date.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-        timeZone: 'UTC', hour12: false, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit',
+        timeZone: 'UTC', hour12: true, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit',
       }));
       const localStr = date.toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-        hour12: false, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit',
+        hour12: true, weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', second: '2-digit',
       });
       const offset = -date.getTimezoneOffset();
       const sign = offset >= 0 ? '+' : '-';
@@ -259,10 +259,10 @@ function App() {
         <Section title={lang === 'zh' ? '当前 Unix 时间戳（Unix timestamp）' : 'The Current Epoch Unix Timestamp'} open={openSections.ts} onToggle={() => handleToggleSection('ts')} showToggle onMouseEnter={() => setCopyIdx('ts')} onMouseLeave={() => setCopyIdx(null)}>
           <TimestampDisplay timestamp={timestamp} copied={copied} onCopy={handleCopy} lang={lang} open={openSections.ts} />
         </Section>
-        <Section title={lang === 'zh' ? '时间戳转时间' : 'Timestamp to Date'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
+        <Section title={lang === 'zh' ? '时间戳转日期' : 'Timestamp to Date'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
           <TimestampToHuman inputTs={inputTs} setInputTs={setInputTs} handleTsToHuman={handleTsToHuman} tsError={tsError} humanTime={humanTime} gmtTime={gmtTime} localTime={localTime} relativeTime={relativeTime} lang={lang} open={openSections.toHuman} />
         </Section>
-        <Section title={lang === 'zh' ? '人类时间转Unix时间戳' : 'Human Time to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>
+        <Section title={lang === 'zh' ? '人类时间转 Unix 时间戳' : 'Human Time to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>
           <HumanToTimestamp inputDate={inputDate} setInputDate={setInputDate} inputTime={inputTime} setInputTime={setInputTime} tsUnit={tsUnit} setTsUnit={setTsUnit} handleHumanToTs={handleHumanToTs} ts3Error={ts3Error} outputTs={outputTs} lang={lang} open={openSections.toTs} />
         </Section>
         <Section title={lang === 'zh' ? '多语言代码示例' : 'Code Examples in Multiple Languages'} open={openSections.code} onToggle={() => handleToggleSection('code')} showToggle onMouseEnter={() => setCopyIdx('code')} onMouseLeave={() => setCopyIdx(null)}>
