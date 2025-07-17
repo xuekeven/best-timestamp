@@ -4,7 +4,7 @@ interface IntroProps {
   lang: string;
   open: boolean;
 }
-// '' : 'What is a Unix Timestamp?
+
 const Intro: React.FC<IntroProps> = ({ lang, open }) => (
   open ? (
     <div style={{ fontSize: 16, color: '#222', lineHeight: 1.8 }}>

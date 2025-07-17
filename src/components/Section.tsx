@@ -23,7 +23,6 @@ const Section: React.FC<SectionProps> = ({ title, open, onToggle, children, onMo
         <button
           onClick={onToggle}
           style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginLeft: 8 }}
-          title={open ? '收起/Collapse' : '展开/Expand'}
         >
           {open ? (
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 15 12 9 18 15"/></svg>

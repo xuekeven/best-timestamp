@@ -40,6 +40,8 @@ const CodeExamples: React.FC<CodeExamplesProps> = ({ codeExamples, lang, copyIdx
                 marginBottom: 12,
                 position: 'relative',
               }}
+              onMouseEnter={() => setCopyIdx(`${idx}`)}
+              onMouseLeave={() => setCopyIdx(null)}
             >
               <div style={{ fontWeight: 500, marginBottom: 8 }}>{ex.lang}</div>
               <pre style={{ background: '#fff', borderRadius: 6, padding: 12, fontSize: 14, overflowX: 'auto', border: '1px solid #eee', margin: 0 }}>
@@ -68,14 +70,9 @@ const CodeExamples: React.FC<CodeExamplesProps> = ({ codeExamples, lang, copyIdx
                   title={lang === 'zh' ? '复制代码' : 'Copy code'}
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1677ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-                  <span style={{ fontSize: 13, color: '#1677ff' }}>{copiedIdx === idx ? (lang === 'zh' ? '已复制' : 'Copied!') : (lang === 'zh' ? '复制' : 'Copy')}</span>
+                  <span style={{ fontSize: 13, color: '#1677ff' }}>{copiedIdx === idx ? (lang === 'zh' ? '已复制' : 'Copied') : (lang === 'zh' ? '复制' : 'Copy')}</span>
                 </button>
               )}
-              <div
-                style={{ position: 'absolute', inset: 0 }}
-                onMouseEnter={() => setCopyIdx(`${idx}`)}
-                onMouseLeave={() => setCopyIdx(null)}
-              />
             </div>
           );
         })}
