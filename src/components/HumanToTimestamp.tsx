@@ -17,6 +17,9 @@ interface HumanToTimestampProps {
 const HumanToTimestamp: React.FC<HumanToTimestampProps> = ({ inputDate, setInputDate, inputTime, setInputTime, tsUnit, setTsUnit, handleHumanToTs, ts3Error, outputTs, lang, open }) => (
   open ? (
     <>
+      <div style={{ color: '#888', fontSize: 14, marginBottom: 8 }}>
+        {lang === 'zh' ? '请选择日期和时间，支持秒、毫秒、微秒、纳秒' : 'Select date and time, supports seconds, ms, μs, ns'}
+      </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
         <input
           type="date"
@@ -47,9 +50,6 @@ const HumanToTimestamp: React.FC<HumanToTimestampProps> = ({ inputDate, setInput
         >
           {lang === 'zh' ? '转为时间戳' : 'To Timestamp'}
         </button>
-      </div>
-      <div style={{ color: '#888', fontSize: 14, marginTop: 6 }}>
-        {lang === 'zh' ? '请选择日期和时间，支持秒、毫秒、微秒、纳秒' : 'Select date and time, supports seconds, ms, μs, ns'}
       </div>
       <div style={{ marginTop: 12, minHeight: 24 }}>
         {ts3Error && <span style={{ color: '#d4380d', fontSize: 16 }}>{ts3Error}</span>}

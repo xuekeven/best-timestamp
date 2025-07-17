@@ -73,7 +73,7 @@ const TimestampDisplay: React.FC<TimestampDisplayProps> = ({ timestamp, copied, 
             height: 32,
             transition: 'background 0.2s',
             outline: 'none',
-            marginLeft: 8,
+            marginLeft: 2,
           }}
         >
           {copied ? (lang === 'zh' ? '已复制' : 'Copied') : (lang === 'zh' ? '复制' : 'Copy')}

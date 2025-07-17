@@ -16,7 +16,7 @@ interface TimestampToHumanProps {
 const TimestampToHuman: React.FC<TimestampToHumanProps> = ({ inputTs, setInputTs, handleTsToHuman, tsError, humanTime, gmtTime, localTime, relativeTime, lang, open }) => (
   open ? (
     <>
-      <div style={{ color: '#888', fontSize: 14, marginTop: 6, marginBottom: 8 }}>
+      <div style={{ color: '#888', fontSize: 14, marginBottom: 8 }}>
         {lang === 'zh'
           ? '支持秒（10位）、毫秒（13位）、微秒（16位）、纳秒（19位）的 Unix 时间戳'
           : 'Supports Unix timestamp in seconds (10), milliseconds (13), microseconds (16), nanoseconds (19)'}
