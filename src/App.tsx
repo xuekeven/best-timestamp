@@ -318,10 +318,10 @@ function App() {
         <Section title={lang === 'zh' ? '当前时间戳（Unix Timestamp）' : 'The Current Epoch Unix Timestamp'} open={openSections.ts} onToggle={() => handleToggleSection('ts')} showToggle onMouseEnter={() => setCopyIdx('ts')} onMouseLeave={() => setCopyIdx(null)}>
           <TimestampDisplay timestamp={timestamp} copied={copied} onCopy={handleCopy} lang={lang} open={openSections.ts} />
         </Section>
-        <Section title={lang === 'zh' ? '时间戳转日期' : 'Unix Timestamp to Date'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
+        <Section title={lang === 'zh' ? '时间戳（Unix Timestamp）转日期' : 'Unix Timestamp to Date'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
           <TimestampToHuman inputTs={inputTs} setInputTs={setInputTs} handleTsToHuman={handleTsToHuman} tsError={tsError} humanTime={humanTime} gmtTime={gmtTime} localTime={localTime} relativeTime={relativeTime} lang={lang} open={openSections.toHuman} />
         </Section>
-        <Section title={lang === 'zh' ? '日期转时间戳' : 'Date to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>
+        <Section title={lang === 'zh' ? '日期转时间戳（Unix Timestamp）' : 'Date to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>
           <HumanToTimestamp
             inputYear={inputYear} setInputYear={setInputYear}
             inputMonth={inputMonth} setInputMonth={setInputMonth}
@@ -337,7 +337,7 @@ function App() {
         <Section title={lang === 'zh' ? '多语言代码示例' : 'Code Examples in Multiple Languages'} open={openSections.code} onToggle={() => handleToggleSection('code')} showToggle onMouseEnter={() => setCopyIdx('code')} onMouseLeave={() => setCopyIdx(null)}>
           <CodeExamples codeExamples={codeExamples} lang={lang} copyIdx={copyIdx} setCopyIdx={setCopyIdx} copiedIdx={copiedIdx} handleCopyCode={handleCopyCode} open={openSections.code} />
         </Section>
-        <Section title={lang === 'zh' ? '什么是 Unix 时间戳？' : 'What is a Unix Timestamp?'} open={openSections.intro} onToggle={() => handleToggleSection('intro')} showToggle onMouseEnter={() => setCopyIdx('intro')} onMouseLeave={() => setCopyIdx(null)}>
+        <Section title={lang === 'zh' ? '常见问题' : 'FAQ'} open={openSections.intro} onToggle={() => handleToggleSection('intro')} showToggle onMouseEnter={() => setCopyIdx('intro')} onMouseLeave={() => setCopyIdx(null)}>
           <Intro lang={lang} open={openSections.intro} />
         </Section>
       </main>
