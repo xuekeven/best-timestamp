@@ -2,13 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 // import { Helmet } from 'react-helmet';
 import './App.css';
 
-// Google Analytics 类型声明
-declare global {
-  interface Window {
-    dataLayer: any;
-    gtag: (...args: any[]) => void;
-  }
-}
 import Header from './components/Header';
 import Section from './components/Section';
 import TimestampDisplay from './components/TimestampDisplay';
@@ -16,6 +9,14 @@ import TimestampToHuman from './components/TimestampToHuman';
 import HumanToTimestamp from './components/HumanToTimestamp';
 import CodeExamples from './components/CodeExamples';
 import Intro from './components/Intro';
+
+// Google Analytics 类型声明
+declare global {
+  interface Window {
+    dataLayer: any;
+    gtag: (...args: any[]) => void;
+  }
+}
 
 const LANGUAGES = [
   { code: 'zh', label: '中文' },
