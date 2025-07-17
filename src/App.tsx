@@ -205,6 +205,59 @@ function App() {
     metaKeywords.setAttribute('content', lang === 'zh'
       ? 'Unix时间戳,时间戳转换,时间戳转日期,日期转时间戳,时间戳工具,epoch,unix timestamp'
       : 'unix timestamp, timestamp converter, epoch, date to timestamp, timestamp to date, online tool');
+
+    // Open Graph
+    const setOg = (property: string, content: string) => {
+      let el = document.querySelector(`meta[property='${property}']`);
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute('property', property);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+    setOg('og:title', lang === 'zh' ? 'Unix时间戳转换工具' : 'The Best Unix Timestamp Converter');
+    setOg('og:description', lang === 'zh'
+      ? '支持Unix时间戳与日期互转，支持多语言代码示例，自动刷新当前时间戳，极致易用的时间戳工具。'
+      : 'Convert Unix timestamp to date and vice versa. Multi-language code examples. The best online Unix timestamp tool.');
+    setOg('og:type', 'website');
+    setOg('og:url', 'https://the-best-timestamp.com/');
+    setOg('og:image', 'https://the-best-timestamp.com/logo.svg');
+
+    // Twitter Card
+    const setTwitter = (name: string, content: string) => {
+      let el = document.querySelector(`meta[name='${name}']`);
+      if (!el) {
+        el = document.createElement('meta');
+        el.setAttribute('name', name);
+        document.head.appendChild(el);
+      }
+      el.setAttribute('content', content);
+    };
+    setTwitter('twitter:card', 'summary_large_image');
+    setTwitter('twitter:title', lang === 'zh' ? 'Unix时间戳转换工具' : 'The Best Unix Timestamp Converter');
+    setTwitter('twitter:description', lang === 'zh'
+      ? '支持Unix时间戳与日期互转，支持多语言代码示例，自动刷新当前时间戳，极致易用的时间戳工具。'
+      : 'Convert Unix timestamp to date and vice versa. Multi-language code examples. The best online Unix timestamp tool.');
+    setTwitter('twitter:image', 'https://the-best-timestamp.com/logo.svg');
+
+    // JSON-LD 结构化数据
+    let ld = document.getElementById('ld-json-seo');
+    if (ld) ld.remove();
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'ld-json-seo';
+    script.innerHTML = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: lang === 'zh' ? 'Unix时间戳转换工具' : 'The Best Unix Timestamp Converter',
+      url: 'https://the-best-timestamp.com/',
+      description: lang === 'zh'
+        ? '支持Unix时间戳与日期互转，支持多语言代码示例，自动刷新当前时间戳，极致易用的时间戳工具。'
+        : 'Convert Unix timestamp to date and vice versa. Multi-language code examples. The best online Unix timestamp tool.',
+      image: 'https://the-best-timestamp.com/logo.svg',
+    });
+    document.head.appendChild(script);
   }, [lang]);
 
   const handleCopy = async () => {

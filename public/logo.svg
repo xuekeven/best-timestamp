@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="256" y2="256" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1677ff"/>
+      <stop offset="1" stop-color="#52c41a"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="110" fill="url(#g1)"/>
+  <circle cx="128" cy="128" r="90" fill="#fff"/>
+  <text x="50%" y="48%" text-anchor="middle" fill="#1677ff" font-size="28" font-family="'Segoe UI',Arial,sans-serif" font-weight="bold" dy=".3em">THE BEST</text>
+  <text x="50%" y="63%" text-anchor="middle" fill="#52c41a" font-size="28" font-family="'Segoe UI',Arial,sans-serif" font-weight="bold">TIMESTAMP</text>
+</svg> 
