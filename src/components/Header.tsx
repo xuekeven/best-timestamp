@@ -11,7 +11,18 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ lang, setLang, dropdown, setDropdown, langRef, LANGUAGES }) => (
   <header className="sticky-header">
-    <div className="header-title">The Best Timestamp</div>
+    <h1 className="header-title" style={{
+      background: 'linear-gradient(90deg, #1677ff 0%, #52c41a 100%)',
+      color: '#fff',
+      padding: '8px',
+      margin: '0 0 0 0',
+      borderRadius: 8,
+      fontWeight: 700,
+      fontSize: 28,
+      letterSpacing: 1
+    }}>
+      The Best Timestamp
+    </h1>
     <div
       className="header-lang"
       ref={langRef as React.RefObject<HTMLDivElement>}

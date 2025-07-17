@@ -18,7 +18,7 @@ const Section: React.FC<SectionProps> = ({ title, open, onToggle, children, onMo
     style={{ position: 'relative' }}
   >
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      <div style={{ fontWeight: 600, fontSize: 18, marginBottom: open ? 12 : 0 }}>{title}</div>
+      <h2 style={{ fontWeight: 600, fontSize: 18, marginTop: 0, marginBottom: open ? 8 : 4 }}>{title}</h2>
       {showToggle && (
         <button
           onClick={onToggle}

@@ -46,7 +46,7 @@ const CodeExamples: React.FC<CodeExamplesProps> = ({ codeExamples, lang, copyIdx
               gap: 16,
             }}
           >
-            <div style={{ fontWeight: 500, marginBottom: 8 }}>{ex.lang}</div>
+            <div style={{ fontWeight: 500 }}>{ex.lang}</div>
             {/* 获取当前时间戳 */}
             <div>
               <div style={{ color: '#1677ff', fontWeight: 500, marginBottom: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
