@@ -68,7 +68,7 @@ const codeExamples = [
 
 function App() {
   // 多语言
-  const [lang, setLang] = useState('zh');
+  const [lang, setLang] = useState('en');
   const [dropdown, setDropdown] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
   // 实时 Unix 时间戳
@@ -256,10 +256,10 @@ function App() {
       {/* <Helmet htmlAttributes={{ lang: lang }}>...</Helmet> */}
       <Header lang={lang} setLang={setLang} dropdown={dropdown} setDropdown={setDropdown} langRef={langRef as React.RefObject<HTMLDivElement>} LANGUAGES={LANGUAGES} />
       <main className="main-content">
-        <Section title={lang === 'zh' ? '当前 Unix 时间戳' : 'Current Unix Timestamp'} open={openSections.ts} onToggle={() => handleToggleSection('ts')} showToggle onMouseEnter={() => setCopyIdx('ts')} onMouseLeave={() => setCopyIdx(null)}>
+        <Section title={lang === 'zh' ? '当前 Unix 时间戳（Unix timestamp）' : 'The Current Epoch Unix Timestamp'} open={openSections.ts} onToggle={() => handleToggleSection('ts')} showToggle onMouseEnter={() => setCopyIdx('ts')} onMouseLeave={() => setCopyIdx(null)}>
           <TimestampDisplay timestamp={timestamp} copied={copied} onCopy={handleCopy} lang={lang} open={openSections.ts} />
         </Section>
-        <Section title={lang === 'zh' ? '时间戳转人类时间' : 'Timestamp to Human Time'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
+        <Section title={lang === 'zh' ? '时间戳转时间' : 'Timestamp to Date'} open={openSections.toHuman} onToggle={() => handleToggleSection('toHuman')} showToggle onMouseEnter={() => setCopyIdx('toHuman')} onMouseLeave={() => setCopyIdx(null)}>
           <TimestampToHuman inputTs={inputTs} setInputTs={setInputTs} handleTsToHuman={handleTsToHuman} tsError={tsError} humanTime={humanTime} gmtTime={gmtTime} localTime={localTime} relativeTime={relativeTime} lang={lang} open={openSections.toHuman} />
         </Section>
         <Section title={lang === 'zh' ? '人类时间转Unix时间戳' : 'Human Time to Unix Timestamp'} open={openSections.toTs} onToggle={() => handleToggleSection('toTs')} showToggle onMouseEnter={() => setCopyIdx('toTs')} onMouseLeave={() => setCopyIdx(null)}>

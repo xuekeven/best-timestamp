@@ -16,6 +16,11 @@ interface TimestampToHumanProps {
 const TimestampToHuman: React.FC<TimestampToHumanProps> = ({ inputTs, setInputTs, handleTsToHuman, tsError, humanTime, gmtTime, localTime, relativeTime, lang, open }) => (
   open ? (
     <>
+      <div style={{ color: '#888', fontSize: 14, marginTop: 6 }}>
+        {lang === 'zh'
+          ? '支持秒（10位）、毫秒（13位）、微秒（16位）、纳秒（19位）Unix时间戳'
+          : 'Supports Unix timestamp in seconds (10), milliseconds (13), microseconds (16), nanoseconds (19)'}
+      </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
         <input
           type="text"
@@ -50,11 +55,7 @@ const TimestampToHuman: React.FC<TimestampToHumanProps> = ({ inputTs, setInputTs
           {lang === 'zh' ? '转为人类日期' : 'To Human Date'}
         </button>
       </div>
-      <div style={{ color: '#888', fontSize: 14, marginTop: 6 }}>
-        {lang === 'zh'
-          ? '支持秒（10位）、毫秒（13位）、微秒（16位）、纳秒（19位）Unix时间戳'
-          : 'Supports Unix timestamp in seconds (10), milliseconds (13), microseconds (16), nanoseconds (19)'}
-      </div>
+
       <div style={{ marginTop: 12, minHeight: 24 }}>
         {tsError && <span style={{ color: '#d4380d', fontSize: 16 }}>{tsError}</span>}
         {!tsError && humanTime && (
