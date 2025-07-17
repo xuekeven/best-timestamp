@@ -29,7 +29,8 @@ const TimestampDisplay: React.FC<TimestampDisplayProps> = ({ timestamp, copied, 
         }}
       >
         {new Date(timestamp * 1000).toLocaleString(lang === 'zh' ? 'zh-CN' : 'en-US', {
-          hour12: false,
+          hour12: true,
+          weekday: 'short', 
           year: 'numeric',
           month: '2-digit',
           day: '2-digit',

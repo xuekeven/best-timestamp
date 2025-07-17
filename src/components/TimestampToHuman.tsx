@@ -26,7 +26,7 @@ const TimestampToHuman: React.FC<TimestampToHumanProps> = ({ inputTs, setInputTs
           type="text"
           inputMode="numeric"
           pattern="\\d*"
-          placeholder={lang === 'zh' ? "请输入时间戳" : "Please enter a Timestamp"}
+          placeholder={lang === 'zh' ? "请输入时间戳" : "Please enter a timestamp"}
           value={inputTs}
           onChange={e => setInputTs(e.target.value.replace(/[^\d]/g, ''))}
           style={{
