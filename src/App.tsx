@@ -451,7 +451,17 @@ function App() {
             <Intro lang={lang} open={openSections.intro} />
           </Section>
         </main>
-        <footer className="footer">© 2025 Keven's Tools.</footer>
+        <footer className="footer">
+          © 2025 Keven's Tools. | 
+          <a 
+            href="https://xuekeven.github.io/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ color: '#1677ff', textDecoration: 'none', marginLeft: '8px' }}
+          >
+            Keven's Blog
+          </a>
+        </footer>
       </div>
     </>
   );
